@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tank Strike: Typing Mission</title>
+<!-- Menghubungkan file CSS -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="gameWrapper">
+
+  <!-- ============================================================
+       MENU SCREEN
+       ============================================================ -->
+  <div id="menuScreen" class="screen">
+    <div class="menu-logo">
+      <span class="tank-icon">🪖</span>
+      <h1>Tank Strike</h1>
+      <p>⚡ typing mission ⚡</p>
+    </div>
+    <div class="menu-label">— select difficulty —</div>
+    <div class="diff-grid">
+      <button class="diff-btn easy"    data-diff="easy">
+        <span class="diff-name">Easy</span>
+        <span class="diff-info">Short words · Slow enemies · -2 HP/mistake</span>
+        <span class="diff-highscore" id="hs-easy">BEST: 0</span>
+      </button>
+      <button class="diff-btn medium"  data-diff="medium">
+        <span class="diff-name">Medium</span>
+        <span class="diff-info">Mid words · Faster · -4 HP/mistake</span>
+        <span class="diff-highscore" id="hs-medium">BEST: 0</span>
+      </button>
+      <button class="diff-btn hard"    data-diff="hard">
+        <span class="diff-name">Hard</span>
+        <span class="diff-info">Long words · Fast · -6 HP/mistake</span>
+        <span class="diff-highscore" id="hs-hard">BEST: 0</span>
+      </button>
+      <button class="diff-btn extreme" data-diff="extreme">
+        <span class="diff-name">Extreme</span>
+        <span class="diff-info">Huge words · Blazing fast · -8 HP/mistake</span>
+        <span class="diff-highscore" id="hs-extreme">BEST: 0</span>
+      </button>
+    </div>
+    <div class="menu-hint">[ click a difficulty to start ]</div>
+  </div>
+
+  <!-- ============================================================
+       GAME SCREEN
+       ============================================================ -->
+  <div id="gameScreen" class="hidden">
+
+    <!-- Battlefield layers -->
+    <div id="battlefield">
+      <div class="sky"></div>
+      <div class="stars" id="starField"></div>
+      <div class="mountains">
+        <!-- SVG mountain silhouette -->
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <polygon points="0,120 0,80 60,30 130,70 200,20 300,60 400,10 500,50 620,5 750,55 850,15 950,60 1050,25 1150,55 1200,40 1200,120" fill="#0d1a0a"/>
+          <polygon points="0,120 0,95 80,65 180,85 280,50 400,80 520,45 650,75 800,38 920,70 1050,48 1200,68 1200,120" fill="#0a1508"/>
+        </svg>
+      </div>
+      <div class="ground"></div>
+      <div class="track"></div>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud">
+      <!-- Health -->
+      <div class="hud-hp">
+        <span class="hud-hp-label">⬡ HP</span>
+        <div class="hp-bar-track">
+          <div class="hp-bar-fill" id="hpBar" style="width:100%"></div>
+          <span class="hp-num" id="hpNum">100</span>
+        </div>
+      </div>
+      <!-- Score -->
+      <div class="hud-score">
+        <div class="score-label">⬡ SCORE</div>
+        <div class="score-val" id="scoreVal">0</div>
+      </div>
+      <!-- Combo -->
+      <div class="hud-combo">
+        <div class="combo-val" id="comboVal">×1</div>
+        <div class="combo-label">COMBO</div>
+      </div>
+      <!-- Timer -->
+      <div class="hud-timer">
+        <span class="timer-label">⬡ TIME</span>
+        <div class="timer-val" id="timerVal">60</div>
+      </div>
+      <!-- Difficulty badge -->
+      <div class="hud-diff" id="hudDiff">—</div>
+      <!-- Pause Button -->
+      <button id="hudPauseBtn" class="hud-pause-btn">⏸ ESC</button>
+    </div>
+
+    <!-- Entities layer (tanks + bullets) -->
+    <div id="entitiesLayer">
+      <!-- Player tank (SVG drawn inline for color control) -->
+      <div id="playerTank">
+        <svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="28" width="72" height="22" rx="4" fill="#1a3a1a" stroke="#00ff88" stroke-width="1.5"/>
+          <rect x="20" y="18" width="40" height="16" rx="3" fill="#0f2a0f" stroke="#00ff88" stroke-width="1"/>
+          <rect x="55" y="22" width="30" height="7" rx="2" fill="#0d200d" stroke="#00cc66" stroke-width="1"/>
+          <circle cx="18" cy="50" r="9" fill="#0a180a" stroke="#00ff88" stroke-width="1.5"/>
+          <circle cx="18" cy="50" r="4" fill="#1a3a1a"/>
+          <circle cx="65" cy="50" r="9" fill="#0a180a" stroke="#00ff88" stroke-width="1.5"/>
+          <circle cx="65" cy="50" r="4" fill="#1a3a1a"/>
+          <circle cx="42" cy="50" r="7" fill="#0a180a" stroke="#00ff88" stroke-width="1"/>
+          <circle cx="42" cy="50" r="3" fill="#1a3a1a"/>
+          <rect x="8" y="44" width="72" height="8" rx="2" fill="none" stroke="#007744" stroke-width="2" stroke-dasharray="6,4"/>
+          <text x="28" y="39" font-size="10" fill="#00ff88" text-anchor="middle">★</text>
+          <line x1="35" y1="18" x2="35" y2="10" stroke="#00ff88" stroke-width="1.5"/>
+          <circle cx="35" cy="9" r="2" fill="#00ff88" opacity="0.8" id="antenna">
+            <animate attributeName="opacity" values="0.8;0.1;0.8" dur="1s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+      <!-- Enemy tanks rendered here -->
+      <div id="enemyLayer"></div>
+    </div>
+
+    <!-- Word display at bottom (Now displaying Indonesian meaning) -->
+    <div id="wordDisplay">
+      <div class="typed-chars" id="typedChars"></div>
+    </div>
+
+    <!-- Screen flash overlay -->
+    <div id="screenFlash"></div>
+    <!-- ============================================================
+    MOBILE KEYBOARD SUPPORT
+    ============================================================ -->
+      <input type="text" id="mobileInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; opacity: 0; pointer-events: none; top: -1000px; left: -1000px;">
+      <button id="mobileKbBtn" class="restart-btn hidden-on-desktop" style="position: absolute; top: 80px; left: 50%; transform: translateX(-50%); z-index: 60;">⌨️ TAMPILKAN KEYBOARD</button>
+
+    <!-- ============================================================
+         PAUSE SCREEN OVERLAY
+         ============================================================ -->
+    <div id="pauseScreen" class="screen hidden">
+      <div class="end-title paused">PAUSED</div>
+      <div class="btn-container">
+        <button class="restart-btn" id="resumeBtn">▶ RESUME</button>
+        <button class="restart-btn" id="pauseRestartBtn">↩ RESTART</button>
+        <button class="restart-btn" id="pauseHomeBtn">⌂ HOME</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================
+       END SCREEN (Game Over / Victory)
+       ============================================================ -->
+  <div id="endScreen" class="screen hidden">
+    <div class="end-title" id="endTitle">GAME OVER</div>
+    <div class="end-stats">
+      <div class="stat-row">
+        <span class="stat-key">SCORE</span>
+        <span class="stat-val" id="endScore">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-key">ENEMIES DESTROYED</span>
+        <span class="stat-val" id="endKills">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-key">ACCURACY</span>
+        <span class="stat-val" id="endAcc">0%</span>
+      </div>
+    </div>
+    <div class="btn-container">
+      <button class="restart-btn" id="restartBtn">↩ RESTART</button>
+      <button class="restart-btn" id="homeBtn">⌂ HOME</button>
+    </div>
+  </div>
+
+</div><!-- /gameWrapper -->
+
+<!-- Menghubungkan file JavaScript -->
+<script src="script.js"></script>
+</body>
+</html>
