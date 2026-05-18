@@ -31,8 +31,12 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  width: 100%; height: 100%;
+  width: 100%; 
+  /* Fallback height, akan ditimpa oleh JS agar menyesuaikan keyboard mobile */
+  height: 100vh; 
+  height: calc(var(--vh, 1vh) * 100); 
   overflow: hidden;
+  touch-action: none; /* Mencegah bounce effect di mobile */
   background: var(--bg-dark);
   color: var(--text-main);
   font-family: var(--font-body);
@@ -44,7 +48,10 @@ html, body {
    ============================================================ */
 #gameWrapper {
   position: relative;
-  width: 100vw; height: 100vh;
+  width: 100vw; 
+  /* Menggunakan var(--vh) agar tidak tertutup keyboard */
+  height: 100vh; 
+  height: calc(var(--vh, 1vh) * 100); 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -204,8 +211,14 @@ html, body {
   color: var(--text-dim);
   letter-spacing: 1px;
   animation: blink 1.4s step-end infinite;
+  transition: all 0.3s;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.menu-hint:hover {
+  color: #cc00ff;
+  text-shadow: 0 0 15px #cc00ff;
+  transform: scale(1.1);
+}
 
 .diff-highscore {
   display: block;
@@ -444,6 +457,7 @@ html, body {
 .hud-diff.medium { color: var(--cyan);   border-color: var(--cyan);   }
 .hud-diff.hard   { color: var(--orange); border-color: var(--orange); }
 .hud-diff.extreme{ color: var(--red);    border-color: var(--red);    }
+.hud-diff.chaos  { color: #cc00ff;       border-color: #cc00ff; box-shadow: 0 0 10px rgba(204, 0, 255, 0.4); }
 
 /* Pause Button in HUD */
 .hud-pause-btn {
@@ -469,7 +483,7 @@ html, body {
    ============================================================ */
 #wordDisplay {
   position: absolute;
-  bottom: 20px; /* Sedikit dinaikkan agar lebih jelas di tengah */
+  bottom: 20px; 
   left: 50%; transform: translateX(-50%);
   z-index: 50;
   text-align: center;
@@ -494,7 +508,7 @@ html, body {
    ============================================================ */
 #entitiesLayer {
   position: absolute;
-  bottom: 20%; /* align to track line */
+  bottom: 20%; 
   left: 0; right: 0;
   height: 80px;
   z-index: 30;
@@ -537,7 +551,7 @@ html, body {
   left: 50%; transform: translateX(-50%);
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: clamp(14px, 1.8vw, 18px); /* Sedikit diperbesar */
+  font-size: clamp(14px, 1.8vw, 18px); 
   letter-spacing: 3px;
   background: rgba(0,0,0,0.8);
   border: 1px solid rgba(255,68,68,0.4);
@@ -552,7 +566,7 @@ html, body {
   box-shadow: 0 0 15px rgba(255,215,0,0.6);
 }
 
-/* Dying enemy highlight (word fully typed, waiting for kill shot) */
+/* Dying enemy highlight */
 .enemy.dying .enemy-word {
   border-color: var(--green);
   opacity: 0.5;
@@ -568,19 +582,16 @@ html, body {
   border-radius: 3px;
   box-shadow: 0 0 8px var(--bullet-col);
   z-index: 25;
-  bottom: 28px; /* barrel height */
+  bottom: 28px; 
 }
 .bullet.kill-shot {
   background: linear-gradient(90deg, transparent, var(--cyan), #fff);
   box-shadow: 0 0 10px var(--cyan);
 }
-
-/* Peluru Musuh (Warna Merah) */
 .bullet.enemy-bullet {
   background: linear-gradient(-90deg, transparent, var(--enemy-col), #fff);
   box-shadow: 0 0 10px var(--enemy-col);
 }
-
 
 /* ============================================================
    MINI HIT (Single Bullet Collision)
@@ -590,7 +601,7 @@ html, body {
   width: 24px; height: 24px;
   pointer-events: none;
   z-index: 45;
-  transform: translate(-50%, 0); /* Center on coordinate horizontally */
+  transform: translate(-50%, 0); 
 }
 .mini-hit-core {
   position: absolute; inset: 0;
@@ -693,7 +704,7 @@ html, body {
 }
 #pauseScreen {
   gap: 18px;
-  background: rgba(5, 10, 16, 0.85); /* Semi-transparent */
+  background: rgba(5, 10, 16, 0.85); 
 }
 
 .end-title {
@@ -773,7 +784,7 @@ html, body {
 }
 
 /* ============================================================
-   RESPONSIVE TWEAKS
+   RESPONSIVE TWEAKS & MOBILE KEYBOARD FIX
    ============================================================ */
 @media (max-width: 600px) {
   .diff-grid { grid-template-columns: 1fr; }
@@ -782,32 +793,68 @@ html, body {
   .btn-container { flex-direction: column; }
 }
 
-
-/* Sembunyikan tombol keyboard di layar besar (Desktop) */
 .hidden-on-desktop {
   display: none;
 }
 
-/* Tampilkan tombol keyboard hanya di layar seukuran HP */
 @media (max-width: 768px) {
   .hidden-on-desktop {
     display: block;
   }
 }
 
-/* Warna khusus untuk mode rahasia (Chaos) */
-.hud-diff.chaos { 
-  color: #cc00ff; 
-  border-color: #cc00ff; 
-  box-shadow: 0 0 10px rgba(204, 0, 255, 0.4);
+/* Sembunyikan input asli dari mata agar layar tidak ikut ke-scroll turun */
+#mobileInput {
+  position: absolute;
+  top: 0;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
 }
 
-/* Efek hover untuk tulisan rahasia di menu */
-.menu-hint {
-  transition: all 0.3s;
+/* ============================================================
+   LANDSCAPE WARNING (MOBILE)
+   ============================================================ */
+#landscapeWarning {
+  display: none; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-dark); 
+  z-index: 9999; 
+  color: var(--cyan);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: var(--font-mono);
 }
-.menu-hint:hover {
-  color: #cc00ff;
-  text-shadow: 0 0 15px #cc00ff;
-  transform: scale(1.1);
+
+#landscapeWarning .warning-content {
+  padding: 20px;
+  border: 2px dashed var(--cyan);
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 15px var(--cyan);
+  border-radius: 8px;
+}
+
+#landscapeWarning .rotate-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  animation: rotatePhone 2s infinite ease-in-out;
+}
+
+@keyframes rotatePhone {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Tampilkan overlay ini jika HP posisinya berdiri (Portrait) */
+@media screen and (orientation: portrait) and (max-width: 800px) {
+  #landscapeWarning {
+    display: flex; 
+  }
 }
