@@ -904,6 +904,29 @@ function endGame(result) {
     endScreen.classList.remove('hidden');
   }, 600);
 }
+/* ============================================================
+   MOBILE KEYBOARD VIEWPORT FIX
+   ============================================================ */
+function adjustViewport() {
+  if (window.visualViewport) {
+    // Dapatkan tinggi area layar yang benar-benar terlihat (bebas keyboard)
+    let vpHeight = window.visualViewport.height;
+    
+    // Setel variabel CSS --vh agar elemen lain bisa mengikuti tinggi yang baru
+    document.documentElement.style.setProperty('--vh', `${vpHeight * 0.01}px`);
+    document.body.style.height = `${vpHeight}px`;
+    
+    // Kembalikan scroll ke paling atas jika browser nakal men-scroll otomatis
+    window.scrollTo(0, 0);
+  }
+}
+
+// Panggil fungsi saat layar di-resize (misal: saat keyboard muncul/hilang)
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', adjustViewport);
+  // Panggil sekali di awal
+  adjustViewport();
+}
 
 /* ============================================================
    AMBIENT PARTICLES
