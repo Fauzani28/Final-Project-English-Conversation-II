@@ -210,18 +210,14 @@ function buildEnemySVG() {
   return `<svg viewBox="0 0 80 56" xmlns="http://www.w3.org/2000/svg">
     <rect x="4" y="24" width="64" height="20" rx="3" fill="#3a0a0a" stroke="#ff4444" stroke-width="1.5"/>
     <rect x="14" y="14" width="38" height="15" rx="3" fill="#2a0505" stroke="#ff4444" stroke-width="1"/>
-    <!-- Cannon pointing left -->
     <rect x="4" y="18" width="18" height="7" rx="2" fill="#200303" stroke="#cc2222" stroke-width="1"/>
-    <!-- Wheels -->
     <circle cx="14" cy="44" r="9" fill="#1a0505" stroke="#ff4444" stroke-width="1.5"/>
     <circle cx="14" cy="44" r="4" fill="#3a0a0a"/>
     <circle cx="58" cy="44" r="9" fill="#1a0505" stroke="#ff4444" stroke-width="1.5"/>
     <circle cx="58" cy="44" r="4" fill="#3a0a0a"/>
     <circle cx="36" cy="44" r="7" fill="#1a0505" stroke="#ff4444" stroke-width="1"/>
     <circle cx="36" cy="44" r="3" fill="#3a0a0a"/>
-    <!-- Track -->
     <rect x="6" y="38" width="64" height="8" rx="2" fill="none" stroke="#882222" stroke-width="2" stroke-dasharray="6,4"/>
-    <!-- Skull emblem -->
     <text x="44" y="35" font-size="10" fill="#ff4444" text-anchor="middle">☠</text>
   </svg>`;
 }
@@ -281,6 +277,11 @@ const hudPauseBtn     = document.getElementById('hudPauseBtn');
 const resumeBtn       = document.getElementById('resumeBtn');
 const pauseRestartBtn = document.getElementById('pauseRestartBtn');
 const pauseHomeBtn    = document.getElementById('pauseHomeBtn');
+
+// Profile Buttons & Screen (DI SINI TAMBAHANNYA)
+const profileBtn      = document.getElementById('profileBtn');
+const profileScreen   = document.getElementById('profileScreen');
+const closeProfileBtn = document.getElementById('closeProfileBtn');
 
 /* ============================================================
    MENU: Difficulty selection
@@ -928,6 +929,22 @@ if (window.visualViewport) {
   adjustViewport();
 }
 
+/* ============================================================
+   PROFILE LOGIC
+   ============================================================ */
+if (profileBtn) {
+  profileBtn.addEventListener('click', () => {
+    playSound('type'); // Opsional: berikan efek suara ketik saat diklik
+    profileScreen.classList.remove('hidden');
+  });
+}
+
+if (closeProfileBtn) {
+  closeProfileBtn.addEventListener('click', () => {
+    playSound('type'); 
+    profileScreen.classList.add('hidden');
+  });
+}
 /* ============================================================
    AMBIENT PARTICLES
    ============================================================ */
