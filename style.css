@@ -858,3 +858,59 @@ html, body {
     display: flex; 
   }
 }
+/* ============================================================
+   DEVELOPER PROFILE MODAL
+   ============================================================ */
+#profileScreen {
+  background: rgba(5, 10, 16, 0.95);
+  backdrop-filter: blur(5px);
+}
+
+.profile-card {
+  position: relative;
+  z-index: 10;
+  background: rgba(10, 20, 35, 0.9);
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 25px rgba(0, 207, 255, 0.3), inset 0 0 15px rgba(0, 207, 255, 0.1);
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  animation: profilePop 0.3s ease-out forwards;
+}
+
+@keyframes profilePop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.profile-title {
+  font-family: var(--font-hud);
+  color: var(--cyan);
+  text-shadow: 0 0 15px var(--cyan);
+  margin-bottom: 25px;
+  font-size: clamp(20px, 4vw, 26px);
+  letter-spacing: 3px;
+}
+
+.profile-info {
+  font-family: var(--font-mono);
+  color: var(--text-main);
+  font-size: clamp(14px, 2vw, 16px);
+  line-height: 1.6;
+  text-align: left;
+}
+
+.profile-info p {
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+  padding-bottom: 8px;
+}
+
+.profile-info strong {
+  color: var(--green);
+  text-shadow: 0 0 5px var(--green);
+  display: inline-block;
+  width: 90px;
+}
