@@ -4,15 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tank Strike: Typing Mission</title>
-<!-- Menghubungkan file CSS -->
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="gameWrapper">
 
-  <!-- ============================================================
-       MENU SCREEN
-       ============================================================ -->
   <div id="menuScreen" class="screen">
     <div class="menu-logo">
       <span class="tank-icon">🪖</span>
@@ -42,20 +38,18 @@
         <span class="diff-highscore" id="hs-extreme">BEST: 0</span>
       </button>
     </div>
+    
+    <button id="profileBtn" class="restart-btn" style="margin-top: 20px; background: var(--cyan); box-shadow: 0 0 20px rgba(0,207,255,0.5);">👤 DEVELOPER PROFILE</button>
+
     <div class="menu-hint">[ click a difficulty to start ]</div>
   </div>
 
-  <!-- ============================================================
-       GAME SCREEN
-       ============================================================ -->
   <div id="gameScreen" class="hidden">
 
-    <!-- Battlefield layers -->
     <div id="battlefield">
       <div class="sky"></div>
       <div class="stars" id="starField"></div>
       <div class="mountains">
-        <!-- SVG mountain silhouette -->
         <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
           <polygon points="0,120 0,80 60,30 130,70 200,20 300,60 400,10 500,50 620,5 750,55 850,15 950,60 1050,25 1150,55 1200,40 1200,120" fill="#0d1a0a"/>
           <polygon points="0,120 0,95 80,65 180,85 280,50 400,80 520,45 650,75 800,38 920,70 1050,48 1200,68 1200,120" fill="#0a1508"/>
@@ -65,9 +59,7 @@
       <div class="track"></div>
     </div>
 
-    <!-- HUD -->
     <div id="hud">
-      <!-- Health -->
       <div class="hud-hp">
         <span class="hud-hp-label">⬡ HP</span>
         <div class="hp-bar-track">
@@ -75,30 +67,23 @@
           <span class="hp-num" id="hpNum">100</span>
         </div>
       </div>
-      <!-- Score -->
       <div class="hud-score">
         <div class="score-label">⬡ SCORE</div>
         <div class="score-val" id="scoreVal">0</div>
       </div>
-      <!-- Combo -->
       <div class="hud-combo">
         <div class="combo-val" id="comboVal">×1</div>
         <div class="combo-label">COMBO</div>
       </div>
-      <!-- Timer -->
       <div class="hud-timer">
         <span class="timer-label">⬡ TIME</span>
         <div class="timer-val" id="timerVal">60</div>
       </div>
-      <!-- Difficulty badge -->
       <div class="hud-diff" id="hudDiff">—</div>
-      <!-- Pause Button -->
       <button id="hudPauseBtn" class="hud-pause-btn">⏸ ESC</button>
     </div>
 
-    <!-- Entities layer (tanks + bullets) -->
     <div id="entitiesLayer">
-      <!-- Player tank (SVG drawn inline for color control) -->
       <div id="playerTank">
         <svg viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg">
           <rect x="5" y="28" width="72" height="22" rx="4" fill="#1a3a1a" stroke="#00ff88" stroke-width="1.5"/>
@@ -118,26 +103,17 @@
           </circle>
         </svg>
       </div>
-      <!-- Enemy tanks rendered here -->
       <div id="enemyLayer"></div>
     </div>
 
-    <!-- Word display at bottom (Now displaying Indonesian meaning) -->
     <div id="wordDisplay">
       <div class="typed-chars" id="typedChars"></div>
     </div>
 
-    <!-- Screen flash overlay -->
     <div id="screenFlash"></div>
-    <!-- ============================================================
-    MOBILE KEYBOARD SUPPORT
-    ============================================================ -->
-      <input type="text" id="mobileInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; opacity: 0; pointer-events: none; top: -1000px; left: -1000px;">
+    <input type="text" id="mobileInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="position: absolute; opacity: 0; pointer-events: none; top: -1000px; left: -1000px;">
       <button id="mobileKbBtn" class="restart-btn hidden-on-desktop" style="position: absolute; top: 80px; left: 50%; transform: translateX(-50%); z-index: 60;">⌨️ TAMPILKAN KEYBOARD</button>
 
-    <!-- ============================================================
-         PAUSE SCREEN OVERLAY
-         ============================================================ -->
     <div id="pauseScreen" class="screen hidden">
       <div class="end-title paused">PAUSED</div>
       <div class="btn-container">
@@ -149,9 +125,6 @@
 
   </div>
 
-  <!-- ============================================================
-       END SCREEN (Game Over / Victory)
-       ============================================================ -->
   <div id="endScreen" class="screen hidden">
     <div class="end-title" id="endTitle">GAME OVER</div>
     <div class="end-stats">
@@ -174,9 +147,21 @@
     </div>
   </div>
 
-</div><!-- /gameWrapper -->
+  <div id="profileScreen" class="screen hidden" style="z-index: 200;">
+    <div class="profile-card">
+      <h2 class="profile-title">DEVELOPER PROFILE</h2>
+      <div class="profile-info">
+        <p><strong>Name:</strong> Muhammad Fachri Fauzani</p>
+        <p><strong>Role:</strong> Student at Politeknik Negeri Medan</p>
+        <p><strong>Base:</strong> Medan, North Sumatra</p>
+        <p><strong>Experience:</strong> Raimuna Nasional Scouting</p>
+        <p><strong>GitHub:</strong> <a href="https://github.com/Fauzani28" target="_blank" style="color: var(--cyan); text-decoration: none;">https://github.com/Fauzani28</a></p>
+        <p><strong>Instagram:</strong> <a href="https://www.instagram.com/zannn_xy.z/" target="_blank" style="color: var(--cyan); text-decoration: none;">https://instagram.com/fauzani28</a></p>
+      </div>
+      <button id="closeProfileBtn" class="restart-btn" style="margin-top: 25px; width: 100%;">BACK TO MENU</button>
+    </div>
+  </div>
 
-<!-- Menghubungkan file JavaScript -->
-<script src="script.js"></script>
+</div><script src="script.js"></script>
 </body>
 </html>
